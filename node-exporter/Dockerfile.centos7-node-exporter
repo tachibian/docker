@@ -1,0 +1,20 @@
+#Dockerfile for Prometheus
+FROM docker.io/centos:7.9.2009
+MAINTAINER Kazuhiro Tachibana
+RUN yum -y install sudo which wget iproute telnet traceroute;\
+    rm -f /etc/localtime;\
+    ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;\
+    groupadd -g 20000 rms;\
+    adduser -u 20120 -g 20000 -c 'Hoken User' -m -d '/home/hokenuser' -s '/sbin/nologin' hokenuser;\
+    mkdir -p /usr/cncf;\
+    curl -SL https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz | tar -xzC /usr/cncf;\
+    mv /usr/cncf/node_exporter-1.3.1.linux-amd64 /usr/cncf/node-exporter-1.3.1;\
+    ln -s /usr/cncf/node-exporter-1.3.1 /usr/cncf/node-exporter;\
+    chown -R hokenuser:rms /usr/cncf/node-exporter-1.3.1 /usr/cncf/node-exporter;\
+    echo 'export NODE_EXPORTER_HOME="/usr/cncf/node-exporter"' >> /home/hokenuser/.bashrc;\
+    echo 'export PATH="$NODE_EXPORTER_HOME:$PATH"' >> /home/hokenuser/.bashrc;\
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace
+ENV HOME /home/hokenuser
+USER hokenuser
+WORKDIR /home/hokenuser
+ENTRYPOINT ["/bin/bash"]

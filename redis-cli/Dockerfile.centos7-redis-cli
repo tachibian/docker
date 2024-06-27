@@ -1,0 +1,24 @@
+#Dockerfile for Redis Client
+FROM docker.io/centos:7.9.2009
+MAINTAINER Kazuhiro Tachibana
+RUN yum -y install sudo which wget iproute telnet traceroute tcpdump gcc make;\
+    rm -f /etc/localtime;\
+    ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;\
+    groupadd -g 20000 rms;\
+    adduser -u 20120 -g 20000 -c 'Hoken User' -m -d '/home/hokenuser' -s '/sbin/nologin' hokenuser;\    
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace;\
+    wget -O /home/hokenuser/redis-stable.tar.gz http://download.redis.io/redis-stable.tar.gz;\
+    tar -xzf /home/hokenuser/redis-stable.tar.gz -C /home/hokenuser;\
+    cd /home/hokenuser/redis-stable;\
+    make;\
+    mkdir -p /usr/redis-6.2.6/bin;\
+    cp -p src/redis-cli /usr/redis-6.2.6/bin;\
+    ln -s /usr/redis-6.2.6 /usr/redis6;\
+    rm -rf /home/hokenuser/redis-stable /home/hokenuser/redis-stable.tar.gz;\
+    echo 'export REDIS_HOME="/usr/redis6"' >> /home/hokenuser/.bashrc;\
+    echo 'export PATH="$REDIS_HOME/bin:$PATH"' >> /home/hokenuser/.bashrc;\
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace 
+ENV HOME /home/hokenuser
+USER hokenuser
+WORKDIR /home/hokenuser
+ENTRYPOINT ["/bin/bash"]

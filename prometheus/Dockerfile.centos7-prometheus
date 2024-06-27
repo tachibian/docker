@@ -1,0 +1,21 @@
+#Dockerfile for Prometheus
+FROM docker.io/centos:7.9.2009
+MAINTAINER Kazuhiro Tachibana
+RUN yum -y install sudo which wget iproute telnet traceroute;\
+    rm -f /etc/localtime;\
+    ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;\
+    groupadd -g 20000 rms;\
+    adduser -u 20120 -g 20000 -c 'Hoken User' -m -d '/home/hokenuser' -s '/sbin/nologin' hokenuser;\
+    mkdir -p /usr/cncf;\
+    curl -SL https://github.com/prometheus/prometheus/releases/download/v2.36.2/prometheus-2.36.2.linux-amd64.tar.gz | tar -xzC /usr/cncf;\
+    mv /usr/cncf/prometheus-2.36.2.linux-amd64 /usr/cncf/prometheus-2.36.2;\
+    ln -s /usr/cncf/prometheus-2.36.2 /usr/cncf/prometheus;\
+    mkdir /usr/cncf/prometheus/data;\
+    chown -R hokenuser:rms /usr/cncf/prometheus-2.36.2 /usr/cncf/prometheus;\
+    echo 'export PROMETHEUS_HOME="/usr/cncf/prometheus"' >> /home/hokenuser/.bashrc;\
+    echo 'export PATH="$PROMETHEUS_HOME:$PATH"' >> /home/hokenuser/.bashrc;\
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace
+ENV HOME /home/hokenuser
+USER hokenuser
+WORKDIR /home/hokenuser
+ENTRYPOINT ["/bin/bash"]

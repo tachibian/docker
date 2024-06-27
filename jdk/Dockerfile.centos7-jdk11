@@ -1,0 +1,17 @@
+#Dockerfile for OpenJdk11
+FROM docker.io/centos:7.9.2009
+MAINTAINER Kazuhiro Tachibana
+ADD openjdk-11.0.2_linux-x64_bin.tar.gz  /usr/java
+RUN yum -y install sudo which wget iproute telnet traceroute tcpdump;\
+    rm -f /etc/localtime;\
+    ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;\
+    groupadd -g 20000 rms;\
+    adduser -u 20120 -g 20000 -c 'Hoken User' -m -d '/home/hokenuser' -s '/sbin/nologin' hokenuser;\
+    ln -s /usr/java/jdk-11.0.2 /usr/java/jdk11;\
+    echo 'export JAVA_HOME="/usr/java/jdk11"' >> /home/hokenuser/.bashrc;\
+    echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> /home/hokenuser/.bashrc;\
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace
+ENV HOME /home/hokenuser
+USER hokenuser
+WORKDIR /home/hokenuser
+ENTRYPOINT ["/bin/bash"]

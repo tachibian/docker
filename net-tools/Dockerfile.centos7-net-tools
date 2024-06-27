@@ -1,0 +1,14 @@
+#Dockerfile for net tools 
+FROM docker.io/centos:7.9.2009
+MAINTAINER Kazuhiro Tachibana
+RUN yum -y install sudo which wget iproute telnet traceroute tcpdump gcc make;\
+    rm -f /etc/localtime;\
+    ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;\
+    groupadd -g 20000 rms;\
+    adduser -u 20120 -g 20000 -c 'Hoken User' -m -d '/home/hokenuser' -s '/sbin/nologin' hokenuser;\    
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace;\
+    sudo -u hokenuser mkdir -p /home/hokenuser/workspace 
+ENV HOME /home/hokenuser
+USER hokenuser
+WORKDIR /home/hokenuser
+ENTRYPOINT ["/bin/bash"]
