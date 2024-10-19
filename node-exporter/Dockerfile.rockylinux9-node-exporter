@@ -1,0 +1,12 @@
+#Dockerfile for Prometheus
+FROM rockylinux9-net-tools:1.0
+MAINTAINER Kazuhiro Tachibana
+ADD node_exporter-1.8.1.linux-amd64.tar.gz /usr/cncf
+RUN ln -s /usr/cncf/node_exporter-1.8.1.linux-amd64 /usr/cncf/node-exporter;\
+    chown -R corpuser:rms /usr/cncf/node_exporter-1.8.1.linux-amd64 /usr/cncf/node-exporter;\
+    mkdir /host;\
+    echo 'export NODE_EXPORTER_HOME="/usr/cncf/node-exporter"' >> /home/corpuser/.bashrc;\
+    echo 'export PATH="$NODE_EXPORTER_HOME:$PATH"' >> /home/corpuser/.bashrc
+ENV HOME /home/corpuser
+USER corpuser
+WORKDIR /home/corpuser

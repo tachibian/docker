@@ -1,0 +1,14 @@
+#Dockerfile for net-tools
+FROM rockylinux:9.3
+MAINTAINER Kazuhiro Tachibana
+#procps-ng:ps, free, skill, pkill, pgrep, snice, tload, top, uptime, vmstat, pidof, pmap, slabtop, w, watch, pwdx and pidwait.
+#iputils: basic utilities for monitoring a network, including ping.
+#iproute: networking utilities including ip, ss and rtmon.
+RUN dnf --refresh -y install sudo which wget procps-ng iputils iproute telnet traceroute tcpdump;\
+    rm -f /etc/locale.conf /etc/localtime;\
+    echo 'LANG="en_US.UTF-8"' >> /etc/locale.conf;\
+    ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;\
+    groupadd -g 20000 rms;\
+    adduser -u 20613 -g 20000 -c 'corp user' -m -d '/home/corpuser' -s '/sbin/nologin' corpuser;\    
+    sudo -u corpuser mkdir -p /home/corpuser/workspace
+ENTRYPOINT ["/bin/bash"]

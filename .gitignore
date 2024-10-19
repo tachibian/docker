@@ -1,0 +1,9 @@
+#ignore resources
+#eclipse project meta files
+.project
+
+#tar ball
+*/*.tar.gz
+
+
+

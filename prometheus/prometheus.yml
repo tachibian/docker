@@ -27,7 +27,7 @@ scrape_configs:
 
     static_configs:
       # - targets: ["localhost:9090"]
-      - targets: ["172.23.202.21:9090"]
+      - targets: ["172.31.4.215:9090"]
   - job_name: "node"
 
     # metrics_path defaults to '/metrics'
@@ -35,10 +35,10 @@ scrape_configs:
 
     static_configs:
       # - targets: ["node-exporter01:8080"]
-      - targets: ["172.23.202.21:8080"]
+      - targets: ["172.31.4.215:8080"]
         labels:
           group: "production"
       # - targets: ["node-exporter02:8080"]
-      - targets: ["172.23.202.21:8081"]
+      - targets: ["172.31.4.215:8081"]
         labels:
           group: "staging"

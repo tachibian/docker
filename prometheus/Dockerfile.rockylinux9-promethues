@@ -1,0 +1,12 @@
+#Dockerfile for Prometheus
+FROM rockylinux9-net-tools:1.0
+MAINTAINER Kazuhiro Tachibana
+ADD prometheus-2.53.0.linux-amd64.tar.gz /usr/cncf
+RUN ln -s /usr/cncf/prometheus-2.53.0.linux-amd64 /usr/cncf/prometheus;\
+    mkdir /usr/cncf/prometheus/data;\
+    chown -R corpuser:rms /usr/cncf/prometheus-2.53.0.linux-amd64 /usr/cncf/prometheus;\
+    echo 'export PROMETHEUS_HOME="/usr/cncf/prometheus"' >> /home/corpuser/.bashrc;\
+    echo 'export PATH="$PROMETHEUS_HOME:$PATH"' >> /home/corpuser/.bashrc    
+ENV HOME /home/corpuser
+USER corpuser
+WORKDIR /home/corpuser

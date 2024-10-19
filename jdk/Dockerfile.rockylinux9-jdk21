@@ -1,0 +1,10 @@
+#Dockerfile for OpenJdk21
+FROM rockylinux9-net-tools:1.0
+MAINTAINER Kazuhiro Tachibana
+ADD openjdk-21.0.2_linux-x64_bin.tar.gz /usr/java
+RUN ln -s /usr/java/jdk-21.0.2 /usr/java/jdk21;\
+    echo 'export JAVA_HOME="/usr/java/jdk21"' >> /home/copruser/.bashrc;\
+    echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> /home/corpuser/.bashrc
+ENV HOME /home/corpuser
+USER corpuser
+WORKDIR /home/corpuser
